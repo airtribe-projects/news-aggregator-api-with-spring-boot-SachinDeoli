@@ -1,46 +1,46 @@
 package com.airtribe.NewsAggregator.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Table(name = "UserDetail")
+@Table(name = "\"user\"")
 public class User {
 
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private Long id;
-    @Column(name = "name", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long userId;
+
+    @NotNull
+    @NotBlank
     private String name;
-    @Column(name = "email", nullable = false, unique = true)
+
+    @Email
     private String email;
-    @Column(name = "password", nullable = false)
+
     private String password;
 
-    public String getName() {
-        return name;
-    }
+    private String role;
 
-    public void setName(String name) {
+    private boolean isEnabled;
+
+    @OneToOne(mappedBy = "user")
+    private Preference preference;
+
+    public User(Long userId, String name, String email, String password, String role, boolean isEnabled, Preference preference) {
+        this.userId = userId;
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+        this.role = role;
+        this.isEnabled = isEnabled;
     }
-
 }
