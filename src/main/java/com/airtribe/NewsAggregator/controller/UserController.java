@@ -1,8 +1,8 @@
 package com.airtribe.NewsAggregator.controller;
 
-import com.airtribe.NewsAggregator.DTOs.AuthResponse;
-import com.airtribe.NewsAggregator.DTOs.UserAuthenticationResult;
-import com.airtribe.NewsAggregator.DTOs.UserDTO;
+import com.airtribe.NewsAggregator.dto.AuthResponse;
+import com.airtribe.NewsAggregator.dto.UserAuthenticationResult;
+import com.airtribe.NewsAggregator.dto.UserDTO;
 import com.airtribe.NewsAggregator.entity.User;
 import com.airtribe.NewsAggregator.service.UserService;
 import com.airtribe.NewsAggregator.service.VerificationTokenService;
@@ -51,8 +51,14 @@ public class UserController {
         return ResponseEntity.ok(new AuthResponse(email,token));
     }
 
-    @GetMapping("/api/hello")
-    public String hello(){
-        return "Hello from News Aggregator !!";
+    @GetMapping("/api/secure-data")
+    public String getSecureData() {
+        return "This is a secured endpoint!";
     }
+
+    @GetMapping("/api/public-data")
+    public String getPublicData() {
+        return "This is a public endpoint.";
+    }
+
 }

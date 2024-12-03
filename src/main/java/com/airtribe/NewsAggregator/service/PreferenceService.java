@@ -1,16 +1,14 @@
 package com.airtribe.NewsAggregator.service;
 
-import com.airtribe.NewsAggregator.DTOs.PreferenceDTO;
+import com.airtribe.NewsAggregator.dto.PreferenceDTO;
 import com.airtribe.NewsAggregator.entity.Preference;
 import com.airtribe.NewsAggregator.entity.User;
-import com.airtribe.NewsAggregator.exceptions.UserPreferenceNotFoundException;
+import com.airtribe.NewsAggregator.exceptions.PreferenceNotFoundException;
 import com.airtribe.NewsAggregator.repository.PreferenceRepository;
 import com.airtribe.NewsAggregator.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PreferenceService {
@@ -28,21 +26,21 @@ public class PreferenceService {
         return user;
     }
 
-    private Preference getUserPreference(User user) throws UserPreferenceNotFoundException{
+    private Preference getUserPreference(User user) throws PreferenceNotFoundException {
         Preference preference = _preferenceRepository.findByUser(user);
         if(preference == null){
-            throw new UserPreferenceNotFoundException("No Preference found for User to Update");
+            throw new PreferenceNotFoundException("No Preference found for User to Update");
         }
         return preference;
     }
 
-    public PreferenceDTO getPreferences(String username) throws UserPreferenceNotFoundException{
+    public PreferenceDTO getPreferences(String username) throws PreferenceNotFoundException {
         User user = getUserFromUsername(username);
         Preference preference =  _preferenceRepository.findByUser(user);
         return new PreferenceDTO(preference.getCategory(),preference.getCountry(),preference.getTopic());
     }
 
-    public void updatePreferences(String username, PreferenceDTO preferencesDto) throws UserPreferenceNotFoundException {
+    public void updatePreferences(String username, PreferenceDTO preferencesDto) throws PreferenceNotFoundException {
         User user = getUserFromUsername(username);
 
         Preference preference = getUserPreference(user);

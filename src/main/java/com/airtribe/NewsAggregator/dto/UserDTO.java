@@ -1,4 +1,4 @@
-package com.airtribe.NewsAggregator.DTOs;
+package com.airtribe.NewsAggregator.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

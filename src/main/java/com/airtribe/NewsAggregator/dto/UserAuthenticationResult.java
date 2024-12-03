@@ -1,4 +1,4 @@
-package com.airtribe.NewsAggregator.DTOs;
+package com.airtribe.NewsAggregator.dto;
 
 import com.airtribe.NewsAggregator.entity.User;
 import lombok.AllArgsConstructor;

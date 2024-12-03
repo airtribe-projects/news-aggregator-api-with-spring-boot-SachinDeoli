@@ -1,7 +1,7 @@
 package com.airtribe.NewsAggregator.controller;
 
-import com.airtribe.NewsAggregator.DTOs.PreferenceDTO;
-import com.airtribe.NewsAggregator.exceptions.UserPreferenceNotFoundException;
+import com.airtribe.NewsAggregator.dto.PreferenceDTO;
+import com.airtribe.NewsAggregator.exceptions.PreferenceNotFoundException;
 import com.airtribe.NewsAggregator.service.PreferenceService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class PreferenceController {
     }
 
     @GetMapping("/api/preferences")
-    public ResponseEntity<?> getPreferences(Authentication authentication) throws UserPreferenceNotFoundException{
+    public ResponseEntity<?> getPreferences(Authentication authentication) throws PreferenceNotFoundException {
         if (authentication == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not authenticated");
         }
@@ -39,7 +39,7 @@ public class PreferenceController {
     }
 
     @PutMapping("/api/preferences")
-    public ResponseEntity<?> updatePreferences(Authentication authentication,@Valid @RequestBody PreferenceDTO preferencesDto) throws UserPreferenceNotFoundException {
+    public ResponseEntity<?> updatePreferences(Authentication authentication,@Valid @RequestBody PreferenceDTO preferencesDto) throws PreferenceNotFoundException {
         if (authentication == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not authenticated");
         }

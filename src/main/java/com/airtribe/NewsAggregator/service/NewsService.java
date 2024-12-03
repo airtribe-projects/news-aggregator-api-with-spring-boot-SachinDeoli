@@ -1,12 +1,12 @@
 package com.airtribe.NewsAggregator.service;
 
-import com.airtribe.NewsAggregator.DTOs.Article;
-import com.airtribe.NewsAggregator.DTOs.NewsResponse;
+import com.airtribe.NewsAggregator.dto.Article;
+import com.airtribe.NewsAggregator.dto.NewsResponse;
 import com.airtribe.NewsAggregator.entity.NewsArticle;
 import com.airtribe.NewsAggregator.entity.Preference;
 import com.airtribe.NewsAggregator.entity.User;
-import com.airtribe.NewsAggregator.exceptions.NewsNotFoundException;
-import com.airtribe.NewsAggregator.exceptions.UserPreferenceNotFoundException;
+import com.airtribe.NewsAggregator.exceptions.ResourceNotFoundException;
+import com.airtribe.NewsAggregator.exceptions.PreferenceNotFoundException;
 import com.airtribe.NewsAggregator.repository.NewsArticleRepository;
 import com.airtribe.NewsAggregator.repository.PreferenceRepository;
 import com.airtribe.NewsAggregator.repository.UserRepository;
@@ -19,9 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -47,26 +45,26 @@ public class NewsService {
 
     @Cacheable(value = "newsArticles", key = "#topic")
     private List<Article> getNewsArticleByTopic(String topic) {
-        String url = "https://newsapi.org/v2/everything?language=en&q="+topic+"&apiKey="+apiKey;
+        String url = "https://newsapi.org/v2/top-headlines?language=en&topic="+topic+"&apiKey="+apiKey;
         NewsResponse response = restTemplate.getForObject(url, NewsResponse.class);
         return response != null ? response.getArticles() : Arrays.asList();
     }
 
     @Cacheable(value = "newsArticles", key = "#country")
     private List<Article> getNewsArticleByCountry(String country) {
-        String url = "https://newsapi.org/v2/everything?language=en&country="+country+"&apiKey="+apiKey;
+        String url = "https://newsapi.org/v2/top-headlines?language=en&country="+country+"&apiKey="+apiKey;
         NewsResponse response = restTemplate.getForObject(url, NewsResponse.class);
         return response != null ? response.getArticles() : Arrays.asList();
     }
 
     @Cacheable(value = "newsArticles", key = "#category")
     private List<Article> getNewsArticleByCategory(String category) {
-        String url = "https://newsapi.org/v2/everything?language=en&category="+category+"&apiKey="+apiKey;
+        String url = "https://newsapi.org/v2/top-headlines?language=en&category="+category+"&apiKey="+apiKey;
         NewsResponse response = restTemplate.getForObject(url, NewsResponse.class);
         return response != null ? response.getArticles() : Arrays.asList();
     }
 
-    public List<Article> getNewsArticles(String username) throws UserPreferenceNotFoundException {
+    public List<Article> getNewsArticles(String username) throws PreferenceNotFoundException {
         User user = _userRepository.findByEmail(username);
         List<Article> articles = null;
         if (user == null) {
@@ -74,7 +72,7 @@ public class NewsService {
         }
         Preference preference = _preferenceRepository.findByUser(user);
         if (preference == null) {
-            throw new UserPreferenceNotFoundException("No Preference found for User to Update");
+            throw new PreferenceNotFoundException("No Preference found for User to Update");
         }
 
         if (preference.getTopic() != null) {
@@ -110,16 +108,16 @@ public class NewsService {
         }
     }
 
-    public void markNewsAsRead(Long id) throws NewsNotFoundException{
+    public void markNewsAsRead(Long id) throws ResourceNotFoundException {
         NewsArticle newsArticle = _newsArticleRepository.findById(id).
-                orElseThrow(() ->new NewsNotFoundException("News Article not found with id: " +id));
+                orElseThrow(() ->new ResourceNotFoundException("News Article not found with id: " +id));
         newsArticle.setRead(true);
         _newsArticleRepository.save(newsArticle);
     }
 
-    public void markNewsAsFavorite(Long id) throws NewsNotFoundException{
+    public void markNewsAsFavorite(Long id) throws ResourceNotFoundException {
         NewsArticle newsArticle = _newsArticleRepository.findById(id).
-                orElseThrow(() ->new NewsNotFoundException("News Article not found with id: " +id));
+                orElseThrow(() ->new ResourceNotFoundException("News Article not found with id: " +id));
         newsArticle.setFavourite(true);
         _newsArticleRepository.save(newsArticle);
     }

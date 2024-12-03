@@ -1,8 +1,8 @@
 package com.airtribe.NewsAggregator.controller;
 
-import com.airtribe.NewsAggregator.DTOs.Article;
-import com.airtribe.NewsAggregator.exceptions.NewsNotFoundException;
-import com.airtribe.NewsAggregator.exceptions.UserPreferenceNotFoundException;
+import com.airtribe.NewsAggregator.dto.Article;
+import com.airtribe.NewsAggregator.exceptions.ResourceNotFoundException;
+import com.airtribe.NewsAggregator.exceptions.PreferenceNotFoundException;
 import com.airtribe.NewsAggregator.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class NewsController {
     NewsService newsService;
 
     @GetMapping("/api/news")
-    public ResponseEntity<?> getNews(Authentication authentication) throws UserPreferenceNotFoundException {
+    public ResponseEntity<?> getNews(Authentication authentication) throws PreferenceNotFoundException {
         String username = authentication.getName();
         List<Article> articles = newsService.getNewsArticles(username);
         if(articles.size() == 0){
@@ -27,13 +27,13 @@ public class NewsController {
     }
 
     @PostMapping("/api/news/{id}/read")
-    public ResponseEntity<?> markNewsAsRead(Authentication authentication, @PathVariable Long id) throws NewsNotFoundException {
+    public ResponseEntity<?> markNewsAsRead(Authentication authentication, @PathVariable Long id) throws ResourceNotFoundException {
         newsService.markNewsAsRead(id);
         return ResponseEntity.ok("News Marked as Read");
     }
 
     @PostMapping("/api/news/{id}/favorite")
-    public ResponseEntity<?> markNewsAsFavorite(Authentication authentication, @PathVariable Long id) throws NewsNotFoundException {
+    public ResponseEntity<?> markNewsAsFavorite(Authentication authentication, @PathVariable Long id) throws ResourceNotFoundException {
         newsService.markNewsAsFavorite(id);
         return ResponseEntity.ok("News Marked as Favourite");
     }

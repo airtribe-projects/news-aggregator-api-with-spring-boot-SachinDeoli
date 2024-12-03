@@ -1,7 +1,7 @@
 package com.airtribe.NewsAggregator.service;
 
-import com.airtribe.NewsAggregator.DTOs.UserAuthenticationResult;
-import com.airtribe.NewsAggregator.DTOs.UserDTO;
+import com.airtribe.NewsAggregator.dto.UserAuthenticationResult;
+import com.airtribe.NewsAggregator.dto.UserDTO;
 import com.airtribe.NewsAggregator.JwtUtil.JwtUtil;
 import com.airtribe.NewsAggregator.entity.User;
 import com.airtribe.NewsAggregator.repository.UserRepository;
