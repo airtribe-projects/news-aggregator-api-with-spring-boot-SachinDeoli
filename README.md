@@ -6,24 +6,32 @@ The **News Aggregator API** is a Spring Boot application that allows users to re
 
 ## Features
 
-### 1. **User Authentication**
+### 1. **User**
 - `POST /api/register`: Register a new user.
 - `POST /api/login`: Authenticate a user and issue a JWT token.
 
+### 2. **Verify Registration**
+- `POST /api/verifyRegistration?token=<token>`: Verify a JWT token.
+
 ### 2. **News Preferences**
+- `POST /api/preferences`: Create a new user's preferences.
 - `GET /api/preferences`: Retrieve the logged-in user's news preferences.
 - `PUT /api/preferences`: Update the logged-in user's preferences.
 
 ### 3. **News Articles**
 - `GET /api/news`: Fetch personalized news articles from external APIs based on user preferences.
+- `POST /api/news/{id}/read`: Mark an article as read.
+- `GET /api/news/read`: Get all read articles.
+- `POST /api/news/{id}/favorite`: Mark an article as favorite.
+- `GET /api/news/favorite`: Get all favorite articles.
 
 ## Technologies Used
 
 - **Spring Boot**: Core framework.
 - **Spring Security**: JWT-based authentication.
-- **Gradle**: Build tool.
+- **Maven**: Build tool.
 - **In-Memory Database**: Stores user data and preferences.
-- **External News APIs**: Integrates with services like NewsAPI, GNews API, etc.
+- **External News APIs**: Integrates with services like NewsAPI.
 - **Spring WebClient**: Fetches news articles asynchronously.
 
 ## Running the Application
@@ -37,7 +45,9 @@ The **News Aggregator API** is a Spring Boot application that allows users to re
 
 - **NewsAPI**: Provides articles from various sources.
 
-> Sign up on these platforms to obtain API keys.
+> Sign up on NewsAPI platform to obtain API keys.
+
+> Add the API key in `application.properties` file.
 
 ## Testing
 
